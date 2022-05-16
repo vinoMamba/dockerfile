@@ -12,8 +12,8 @@ VOLUME ["/home/repos", "/root/.vscode-server/extensions"]
 
 # 更新系统
 RUN yes | pacman -Syu
-# 下载基础工具
-RUN yes| pacman -S git zsh vi vim neovim curl wget tree which
+# 下载基础工具 gcc which make 是为了在wsl arch 里面安装 ruby 用的
+RUN yes| pacman -S git zsh vi vim neovim curl wget tree which gcc make 
 
 # 配置 zsh 
 RUN zsh -c 'git clone https://code.aliyun.com/412244196/prezto.git "$HOME/.zprezto"' &&\
@@ -42,7 +42,7 @@ RUN sh /root/.nvm/nvm.sh &&\
     echo '[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"' >> /root/.zshrc
 
 
-# Ruby
+# Ruby 
 ADD rvm-stable.tar.gz /tmp/rvm-stable.tar.gz
 ENV PATH="/usr/local/rvm/bin:$PATH"
 RUN mv /tmp/rvm-stable.tar.gz/rvm-rvm-6bfc921 /tmp/rvm && cd /tmp/rvm && ./install --auto-dotfiles &&\
