@@ -8,7 +8,7 @@ ENV SHELL /bin/bash
 ADD mirrorlist /etc/pacman.d/mirrorlist
 
 # 设置匿名数据卷
-VOLUME ["/home/repos"]
+VOLUME ["/home/repos", "/root/.vscode-server/extensions"]
 
 # 更新系统
 RUN yes | pacman -Syu
@@ -31,7 +31,7 @@ ADD bashrc /root/.bashrc
 # node 
 RUN yes | pacman -S nodejs npm &&\
     npm config set registry=https://registry.npmmirror.com &&\
-		corepack enable
+    corepack enable
 
 # nvm
 ENV NVM_DIR /root/.nvm
@@ -40,3 +40,13 @@ RUN sh /root/.nvm/nvm.sh &&\
     echo 'export NVM_DIR="$HOME/.nvm"' >> /root/.zshrc &&\
     echo '[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"' >> /root/.zshrc &&\
     echo '[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"' >> /root/.zshrc
+
+
+# Ruby
+ADD rvm-stable.tar.gz /tmp/rvm-stable.tar.gz
+ENV PATH="/usr/local/rvm/bin:$PATH"
+RUN mv /tmp/rvm-stable.tar.gz/rvm-rvm-6bfc921 /tmp/rvm && cd /tmp/rvm && ./install --auto-dotfiles &&\
+    echo "ruby_url=https://cache.ruby-china.com/pub/ruby" > /usr/local/rvm/user/db &&\
+    echo 'gem: --no-document --verbose' > "$HOME/.gemrc" &&\
+    rvm install ruby-3
+# end 
