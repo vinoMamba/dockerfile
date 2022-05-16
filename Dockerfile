@@ -13,13 +13,13 @@ VOLUME ["/home/repos", "/root/.vscode-server/extensions"]
 # 更新系统
 RUN yes | pacman -Syu
 # 下载基础工具
-RUN yes| pacman -S git zsh vi vim neovim curl wget tree
+RUN yes| pacman -S git zsh vi vim neovim curl wget tree which
 
 # 配置 zsh 
 RUN zsh -c 'git clone https://code.aliyun.com/412244196/prezto.git "$HOME/.zprezto"' &&\
     zsh -c 'setopt EXTENDED_GLOB' &&\
     zsh -c 'for rcfile in "$HOME"/.zprezto/runcoms/z*; do ln -s "$rcfile" "$HOME/.${rcfile:t}"; done'
-# 配置完了之后将zsh设置为默认shell
+# 配置完了之后将zsh设置为默认shell   或者编辑/etc/passwd文件，修改用户名后面的默认Shell即可。
 ENV SHELL /bin/zsh
 # 设置默认编辑器为nvim
 ENV EDITOR=nvim
